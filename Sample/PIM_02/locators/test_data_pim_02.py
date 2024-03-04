@@ -23,4 +23,6 @@ class AccessPim:
 class UpdateInfo:
     edit = "//i[@class='oxd-icon bi-pencil-fill']"
     middlename_input_box = "middleName"
-    save_button = "//button[@type='submit']"
+    save_button = '//*[@id="app"]/div[1]/div[2]/div[2]/div/div/div/div[2]/div[1]/form/div[4]/button'
+
+# pytest test_pim_02.py --html=report.html

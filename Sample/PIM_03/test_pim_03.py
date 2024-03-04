@@ -1,8 +1,10 @@
+import time
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support import expected_conditions as EC
 import pytest
 from Locators import test_data_pim_03
 
@@ -11,39 +13,36 @@ class TestPIM03:
     url = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
 
     @pytest.fixture
-    def booting_function(self):
+    def enable_setup(self):
         self.driver = webdriver.Chrome()
-        yield
-        self.driver.close()
-
-    def valid_login(self, booting_function):
         self.driver.maximize_window()
         self.driver.get(self.url)
         self.driver.implicitly_wait(10)
-        self.driver.find_element(By.NAME, test_data_pim_03.Locators.input_box_username).send_keys(
-            test_data_pim_03.LoginPage.username)
-        self.driver.find_element(By.NAME, test_data_pim_03.Locators.input_box_password).send_keys(
-            test_data_pim_03.LoginPage.password)
+        yield
+        self.driver.close()
+
+    def test_delete_info(self, enable_setup):
+        self.driver.find_element(By.NAME, test_data_pim_03.LocatorData.input_box_username).send_keys(
+            test_data_pim_03.LoginData.username)
+        self.driver.find_element(By.NAME, test_data_pim_03.LocatorData.input_box_password).send_keys(
+            test_data_pim_03.LoginData.password)
         login_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, test_data_pim_03.Locators.login_xpath)))
+            EC.element_to_be_clickable((By.XPATH, test_data_pim_03.LocatorData.login_xpath)))
         login_button.click()
-
-    def navigate_to_pim(self):
-        self.driver.find_element(By.XPATH, test_data_pim_03.Locators.pim_tab).click()
-        self.driver.find_element(By.XPATH, test_data_pim_03.Locators.input_box_employeeName).send_keys(
-            test_data_pim_03.LoginData.employeeName)
-        search_box = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, test_data_pim_03.Locators.search)))
-        search_box.click()
-
-    def delete_details(self):
-        self.driver.find_element(By.XPATH, test_data_pim_03.Locators.delete).click()
+        self.driver.find_element(By.XPATH, test_data_pim_03.LocatorData.pim_tab).click()
+        self.driver.find_element(By.XPATH, test_data_pim_03.LocatorData.input_box_employeeName).send_keys(
+            test_data_pim_03.LoginData.empname)
+        search_tab = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, test_data_pim_03.LocatorData.search)))
+        search_tab.click()
+        check = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, test_data_pim_03.LocatorData.checkbox)))
+        check.click()
         delete_tab = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, test_data_pim_03.Locators.delete_button)))
+            EC.presence_of_element_located((By.XPATH, test_data_pim_03.LocatorData.delete)))
         delete_tab.click()
+        delete_prompt = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, test_data_pim_03.LocatorData.delete_button)))
+        delete_prompt.click()
 
 
-TestPIM03().booting_function()
-TestPIM03().valid_login()
-TestPIM03().navigate_to_pim()
-TestPIM03().delete_details()
