@@ -6,4 +6,6 @@ class LoginData:
 
 class LoginPage:
     username = "Aruna"
-    password = "Aruna123"
+    password = "wwooXX"
+
+# pytest test_login_02.py --html=report.html

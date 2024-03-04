@@ -2,8 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions
-from Pages import loginpage02
+from selenium.webdriver.support import expected_conditions as EC
 from Locators import test_info02
 import pytest
 
@@ -17,10 +16,10 @@ class TestLogin2:
         yield
         self.driver.close()
 
-    def invalid_login(self):
+    def test_invalid_login(self, enable_setup):
         try:
-            self.driver.maximize_window()
             self.driver.get(self.url)
+            self.driver.maximize_window()
             self.driver.implicitly_wait(10)
             self.driver.find_element(By.NAME, test_info02.LoginData.input_box_username).send_keys(
                 test_info02.LoginPage.username)
@@ -32,11 +31,3 @@ class TestLogin2:
 
         except NoSuchElementException as invalid_login:
             print(invalid_login)
-
-        finally:
-            self.driver.quit()
-            sleep(4)
-
-
-TestLogin2().invalid_login()
-print("Invalid credentials")
