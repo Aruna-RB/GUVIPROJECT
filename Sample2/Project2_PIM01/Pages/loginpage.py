@@ -7,3 +7,5 @@ class Locators:
 
 class Data:
     username = "Aruna"
+
+# pytest test_code01.py --html=report.html
