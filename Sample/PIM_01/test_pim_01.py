@@ -18,7 +18,7 @@ class TestPim01:
         self.driver.get(self.url)
         self.driver.implicitly_wait(10)
         yield
-        # self.driver.close()
+        self.driver.close()
 
     def test_navigate_to_pim(self, enable_setup):
         # self.driver.maximize_window()
